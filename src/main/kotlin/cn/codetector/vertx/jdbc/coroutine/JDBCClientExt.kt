@@ -6,7 +6,11 @@ import kotlin.coroutines.experimental.suspendCoroutine
 
 suspend fun JDBCClient.getConnection(): SQLConnection = suspendCoroutine { cont ->
     this.getConnection{ conn ->
-        cont.resume(conn.result())
+        if (conn.succeeded()) {
+            cont.resume(conn.result())
+        } else {
+            cont.resumeWithException(conn.cause())
+        }
     }
 }
 

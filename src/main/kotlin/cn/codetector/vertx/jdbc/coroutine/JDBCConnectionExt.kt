@@ -26,30 +26,46 @@ suspend fun SQLConnection.execute(query: String): Boolean = suspendCoroutine { c
 
 suspend fun SQLConnection.query(query: String): ResultSet = suspendCoroutine { cont ->
     this.query(query) {
-        cont.resume(it.result())
+        if (it.succeeded()) {
+            cont.resume(it.result())
+        } else {
+            cont.resumeWithException(it.cause())
+        }
     }
 }
 
 suspend fun SQLConnection.queryWithParams(query: String, args: JsonArray): ResultSet = suspendCoroutine { cont ->
     this.queryWithParams(query, args) {
-        cont.resume(it.result())
+        if (it.succeeded()) {
+            cont.resume(it.result())
+        } else {
+            cont.resumeWithException(it.cause())
+        }
     }
 }
 
 suspend fun SQLConnection.update(query: String): UpdateResult = suspendCoroutine { cont ->
     this.update(query) {
-        cont.resume(it.result())
+        if (it.succeeded()) {
+            cont.resume(it.result())
+        } else {
+            cont.resumeWithException(it.cause())
+        }
     }
 }
 
 suspend fun SQLConnection.updateWithParams(query: String, args: JsonArray): UpdateResult = suspendCoroutine { cont ->
     this.updateWithParams(query, args) {
-        cont.resume(it.result())
+        if (it.succeeded()) {
+            cont.resume(it.result())
+        } else {
+            cont.resumeWithException(it.cause())
+        }
     }
 }
 
 suspend fun SQLConnection.close(): Boolean = suspendCoroutine { cont ->
-    this.close() {
+    this.close {
         cont.resume(it.succeeded())
     }
 }
