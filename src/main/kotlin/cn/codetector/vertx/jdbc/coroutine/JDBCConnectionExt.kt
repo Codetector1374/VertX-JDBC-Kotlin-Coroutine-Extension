@@ -64,6 +64,26 @@ suspend fun SQLConnection.updateWithParams(query: String, args: JsonArray): Upda
     }
 }
 
+suspend fun SQLConnection.batch(sqlStatements: List<String>): List<Int> = suspendCoroutine { cont ->
+    this.batch(sqlStatements) {
+        if (it.succeeded()) {
+            cont.resume(it.result())
+        } else {
+            cont.resumeWithException(it.cause())
+        }
+    }
+}
+
+suspend fun SQLConnection.batchWithParams(sqlStatements: String, args: List<JsonArray>): List<Int> = suspendCoroutine { cont ->
+    this.batchWithParams(sqlStatements, args) {
+        if (it.succeeded()) {
+            cont.resume(it.result())
+        } else {
+            cont.resumeWithException(it.cause())
+        }
+    }
+}
+
 suspend fun SQLConnection.close(): Boolean = suspendCoroutine { cont ->
     this.close {
         cont.resume(it.succeeded())
