@@ -1,12 +1,12 @@
-@file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
-
 package cn.codetector.vertx.jdbc.coroutine
 
 import io.vertx.core.json.JsonArray
 import io.vertx.ext.sql.ResultSet
 import io.vertx.ext.sql.SQLConnection
 import io.vertx.ext.sql.UpdateResult
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by codetector on 2017/3/15.
